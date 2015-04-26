@@ -33,7 +33,7 @@
                     android:layout_centerVertical="true"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_user" />
+                    android:src="@drawable/default_user" />
 
                 <RelativeLayout
                     style="@style/textView_title_list"

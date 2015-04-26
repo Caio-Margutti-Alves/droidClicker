@@ -1,4 +1,4 @@
-package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.viewUtils;
+package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.codeUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,4 +26,13 @@ public class Util {
 		
 		context.startActivity(Intent.createChooser(sendIntent, "Invite via"));
 	}
+
+    public static String fix(String in) {
+        in.replaceAll("&quot;", "\"");
+        in.replaceAll("&amp;", "&");
+        in.replaceAll("&lt;", "<");
+        in.replaceAll("&gt;", ">");
+        return in;
+    }
+
 }

@@ -15,19 +15,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.facebook.Session;
-import com.facebook.widget.LoginButton;
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import java.util.Arrays;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.RegisterAccountActivity;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.navigation.NavigationMain;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.user.User;
 
 public class LoginActivity extends FragmentActivity {
 
 	private UserLoginTask authTask = null;
-
-	private MainFragment mainFragment;
 
 	private String login;
 	private String password;
@@ -37,23 +36,20 @@ public class LoginActivity extends FragmentActivity {
 	private EditText edtPassword;
 	private View loginFormView;
 	private View loginStatusView;
-	private Button btnLogin;
-	private Button btnRegister;
+	private BootstrapButton btnLogin;
+	private  BootstrapButton btnRegister;
 
 	Button.OnClickListener lstnLogin = new Button.OnClickListener() {
 		@Override
 		public void onClick(View view) {
-
-			Intent intent = new Intent(view.getContext(),NavigationMain.class);
-			startActivity(intent);
+			attemptLogin();
 		}
 	};
 
     Button.OnClickListener lstnRegister = new Button.OnClickListener() {
         public void onClick(View view) {
-            //Intent intent = new Intent(view.getContext(),RegisterAccountActivity.class);
-            //startActivity(intent);
-            // attemptLogin();
+            Intent intent = new Intent(view.getContext(),RegisterAccountActivity.class);
+            startActivity(intent);
         }
     };
 
@@ -62,32 +58,16 @@ public class LoginActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		if (savedInstanceState == null) {
-			// Add the fragment on initial activity setup
-			mainFragment = new MainFragment();
-			getSupportFragmentManager().beginTransaction()
-					.add(android.R.id.content, mainFragment).commit();
-		} else {
-			// Or set the fragment from restored state info
-			mainFragment = (MainFragment) getSupportFragmentManager()
-					.findFragmentById(android.R.id.content);
-		}
-
 		edtLogin = (EditText) findViewById(R.id.login);
 		edtPassword = (EditText) findViewById(R.id.password);
 
 		loginFormView = findViewById(R.id.login_form);
 		loginStatusView = findViewById(R.id.login_status);
 
-		btnLogin = (Button) findViewById(R.id.btnLogin);
-		btnRegister = (Button) findViewById(R.id.btnRegister);
+		btnLogin = (BootstrapButton) findViewById(R.id.btnLogin);
+		btnRegister = (BootstrapButton) findViewById(R.id.btnRegister);
 		btnLogin.setOnClickListener(lstnLogin);
 		btnRegister.setOnClickListener(lstnRegister);
-		
-		LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
-		authButton.setFragment(mainFragment);
-		authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_status", "user_birthday"));
-		authButton.setText(R.string.login_facebook);
 
 
 	}
@@ -124,7 +104,7 @@ public class LoginActivity extends FragmentActivity {
 			edtLogin.setError(getString(R.string.error_field_required));
 			focusView = edtLogin;
 			cancel = true;
-		} else if (login.length() < 8) {
+		} else if (login.length() < 6) {
 			edtLogin.setError(getString(R.string.error_invalid_login));
 			focusView = edtLogin;
 			cancel = true;
@@ -185,7 +165,7 @@ public class LoginActivity extends FragmentActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
 	}
 
 	@Override
@@ -211,12 +191,12 @@ public class LoginActivity extends FragmentActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				//User.getUserById("2");
+				User.getUserByLoginPassword(login,password);
 			} catch (Exception e) {
 				return false;
 			}
 
-			//if (User.getId()== null || User.getId().isEmpty())return false;
+			if (User.getId()== null || User.getId().isEmpty())return false;
 			return true;
 		}
 

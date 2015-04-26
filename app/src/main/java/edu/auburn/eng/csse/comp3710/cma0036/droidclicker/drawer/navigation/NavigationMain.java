@@ -24,6 +24,20 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.SparseIntArray;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+//import br.liveo.interfaces.NavigationLiveoListener;
+//import br.liveo.navigationliveo.NavigationLiveo;
 
 import com.google.android.gms.maps.GoogleMap;
 
@@ -32,8 +46,9 @@ import java.util.List;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.adapter.NavigationAdapter;
-import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.MapFragment;
+//import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.MapFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ProfileFragment;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.SettingsFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Menus;
@@ -83,7 +98,7 @@ public class NavigationMain extends ActionBarActivity {
 			// All menus which will contain an accountant should be informed here
 			// Counter.put ("POSITION MENU", "VALUE COUNTER");			
 			SparseIntArray  mCounter = new SparseIntArray();			
-			mCounter.put(Constant.MENU_FRIENDS,7);
+			mCounter.put(Constant.MENU_QUIZZES,7);
 			mNavigationAdapter = new NavigationAdapter(this, NavigationList.getNavigationAdapter(this, mListHeader, mCounter, null));
 		}
 		
@@ -112,8 +127,8 @@ public class NavigationMain extends ActionBarActivity {
 		mFragmentManager = getSupportFragmentManager();
 		
 		switch (posicao) {
-            case Constant.MENU_MAPS:
-                mFragment = new MapFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_MAPS));
+            case Constant.MENU_QUIZZES:
+                mFragment = new QuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
                 break;
             case Constant.MENU_PROFILE:
                 mFragment = new ProfileFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_PROFILE));
@@ -312,5 +327,9 @@ public class NavigationMain extends ActionBarActivity {
 			openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
 			startActivity(openInChooser);
 	    }
+
+
+
+
 
 }

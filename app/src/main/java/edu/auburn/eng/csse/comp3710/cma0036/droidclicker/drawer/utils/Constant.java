@@ -7,11 +7,11 @@ public class Constant {
 	public static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 
     //For the navigation drawer
-    public static final int MENU_MAPS = 0;
-    public static final int MENU_FRIENDS = 1;
-	public static final int MENU_PROFILE = 2;
-	public static final int MENU_SETTINGS = 3;
-	public static final int MENU_INVITE = 4;
+    //public static final int MENU_MAPS = 0;
+    public static final int MENU_QUIZZES = 0;
+	public static final int MENU_PROFILE = 1;
+	public static final int MENU_SETTINGS = 2;
+	public static final int MENU_INVITE = 3;
 
     //For the mark dialog
     public static final int MENU_VIEW_POINT = 0;

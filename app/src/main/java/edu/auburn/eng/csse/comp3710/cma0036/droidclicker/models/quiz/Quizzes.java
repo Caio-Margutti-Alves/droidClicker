@@ -1,23 +1,15 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz;
 
-import android.graphics.Bitmap;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 
-public class Quiz {
+public class Quizzes {
 
-    private String id;
-    private LinkedList<Question> questions;
-    private String duration;
-    private String owner;
+    private LinkedList<Question> quizzes;
 
-    protected Quiz() {
+    protected Quizzes() {
     }
 
-    public Quiz(LinkedList<Question> questions, String duration, String owner) {
+    public Quizzes(LinkedList<Question> questions, String duration, String owner) {
         this.questions = questions;
         this.duration = duration;
         this.owner = owner;
@@ -54,9 +46,4 @@ public class Quiz {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
-    public static ArrayList<Quiz> getQuizzes() {
-        return JsonQuiz.getQuizzes();
-    }
-
 }

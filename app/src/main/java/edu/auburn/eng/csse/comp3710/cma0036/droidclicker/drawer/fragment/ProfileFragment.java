@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.facebook.widget.ProfilePictureView;
+import android.widget.ImageView;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
@@ -41,25 +40,7 @@ public class ProfileFragment extends Fragment {
 	private EditText edtLogin;
 	private Button btnMale;
 	private Button btnFemale;
-	private ProfilePictureView profilePicture;
-
-	Button.OnClickListener lstnMale = new Button.OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			view.setBackgroundColor(Color.rgb(177, 235, 000));
-			btnFemale.setBackgroundColor(Color.rgb(243, 243, 243));
-			gender = 1;
-		}
-	};
-
-	Button.OnClickListener lstnFemale = new Button.OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			view.setBackgroundColor(Color.rgb(177, 235, 000));
-			btnMale.setBackgroundColor(Color.rgb(243, 243, 243));
-			gender = 2;
-		}
-	};
+	private ImageView profilePicture;
 
 	public ProfileFragment newInstance(String text){
 		ProfileFragment mFragment = new ProfileFragment();		
@@ -79,28 +60,21 @@ public class ProfileFragment extends Fragment {
 		edtLastName = (EditText) rootView.findViewById(R.id.edtLastName);
 		edtEmail = (EditText) rootView.findViewById(R.id.edtEmail);
 		edtLogin = (EditText) rootView.findViewById(R.id.edtLogin);
-		edtAge = (EditText) rootView.findViewById(R.id.edtAge);
-		btnMale = (Button) rootView.findViewById(R.id.btnProfileMale);
-		btnFemale = (Button) rootView.findViewById(R.id.btnProfileFemale);
-		profilePicture = (ProfilePictureView) rootView.findViewById(R.id.imgvProfile);
+		profilePicture = (ImageView) rootView.findViewById(R.id.imgvProfile);
 
 		try{
 			edtFisrtName.setText(User.getFirstName());
 			edtLastName.setText(User.getLastName());
-			edtAge.setText(String.valueOf(User.getAge()));
+			//edtAge.setText(String.valueOf(User.getAge()));
 			edtEmail.setText(User.getEmail());
 			edtLogin.setText(User.getLogin());
-			profilePicture.setProfileId(User.getFacebookId());
-	
-			if (User.getGender() != 2)
-				btnMale.setBackgroundColor(Color.rgb(177, 235, 000));
-			else
-				btnFemale.setBackgroundColor(Color.rgb(177, 235, 000));
+			//profilePicture.setProfileId(User.getFacebookId());
+
 			
 		}catch(Exception ex){
 			edtFisrtName.setText("Default");
 			edtLastName.setText("Name");
-			edtAge.setText("Default Age");
+			//edtAge.setText("Default Age");
 			edtEmail.setText("Default Email");
 			edtLogin.setText("Default Login");
 			//profilePicture.setProfileId(User.getFacebookId());

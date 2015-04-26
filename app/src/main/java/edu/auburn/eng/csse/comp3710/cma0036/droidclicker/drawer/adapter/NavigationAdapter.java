@@ -71,7 +71,7 @@ public class NavigationAdapter extends BaseAdapter {
 
 	public void setFriendsCounter(int count){
 		mFriendsCounter = count;
-		mList.get(Constant.MENU_FRIENDS).counter = mFriendsCounter;
+		mList.get(Constant.MENU_QUIZZES).counter = mFriendsCounter;
 		notifyDataSetChanged();
 	}	
 	

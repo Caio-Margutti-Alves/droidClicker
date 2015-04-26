@@ -3,8 +3,7 @@
 
     <!-- Drawer Menu -->
     <string-array name="nav_menu_items">
-        <item>Map</item>
-        <item>Friends</item>
+        <item>Quizzes</item>
  		<item>Profile</item>
     	<item>Settings</item>
         <item>Invite</item>

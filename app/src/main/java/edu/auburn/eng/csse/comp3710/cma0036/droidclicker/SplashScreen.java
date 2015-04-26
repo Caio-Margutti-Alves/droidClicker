@@ -8,6 +8,8 @@ import android.os.Handler;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.login.LoginActivity;
+
 
 /**
  * Created by caioa_000 on 16/04/2015.
@@ -37,14 +39,19 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                // Start your app main activityYoYo.with(Techniques.ZoomOut)
+                YoYo.with(Techniques.ZoomOut)
+                        .duration(2000)
+                        .playOn(findViewById(R.id.imgLogo));
+
+                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
                 startActivity(i);
 
                 // close this activity
                 finish();
             }
         }, SPLASH_TIME_OUT);
+
     }
 
 }

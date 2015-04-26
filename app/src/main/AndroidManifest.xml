@@ -14,7 +14,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light" >
+        android:theme="@style/ActionBarTheme"
+         >
 
         <!-- Splash screen -->
         <activity
@@ -29,10 +30,18 @@
             </intent-filter>
         </activity>
 
-        <!--Login activity -->
+        <!-- Login activity -->
         <activity
-            android:name="com.facebook.LoginActivity"
-            android:label="@string/login_facebook" >
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+
+        <!-- Login activity -->
+        <activity
+            android:name=".RegisterAccountActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
         </activity>
 
         <!-- Main activity -->
@@ -45,7 +54,7 @@
         <activity
             android:name=".drawer.navigation.NavigationMain"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"  >
+            android:label="@string/app_name" >
         </activity>
 
     </application>

@@ -9,12 +9,12 @@ public class Question {
 
     private String questionText;
     private ArrayList<Object> extra;
-    private ArrayList<Question> alternatives;
+    private ArrayList<String> alternatives;
 
     public Question() {
     }
 
-    public Question(String questionText, ArrayList<Object> extra, ArrayList<Question> alternatives) {
+    public Question(String questionText, ArrayList<Object> extra, ArrayList<String> alternatives) {
         this.questionText = questionText;
         this.extra = extra;
         this.alternatives = alternatives;
@@ -36,11 +36,11 @@ public class Question {
         this.extra = extra;
     }
 
-    public ArrayList<Question> getAlternatives() {
+    public ArrayList<String> getAlternatives() {
         return alternatives;
     }
 
-    public void setAlternatives(ArrayList<Question> alternatives) {
+    public void setAlternatives(ArrayList<String> alternatives) {
         this.alternatives = alternatives;
     }
 }

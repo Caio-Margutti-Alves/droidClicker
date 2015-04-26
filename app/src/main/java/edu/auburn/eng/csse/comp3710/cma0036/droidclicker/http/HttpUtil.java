@@ -22,16 +22,14 @@ import java.util.ArrayList;
 
 public class HttpUtil {
 
-	private static String url = "http://rex-pet-server.herokuapp.com";
-	private static String urlGetUserById = "/usuario-com-id";
-	private static String urlGetUserByLoginPassword = "/usuario-com-login-password";
-	private static String urlGetUserByFacebookId = "/usuario-com-facebook-id";
+	private static String url = "https://droidclicker.herokuapp.com";
+
+    private static String urlGetUserById = "/user-by-id";
+	private static String urlGetUserByLoginPassword = "/user-by-login-password";
 	private static String urlNewUser = "/novo-usuario";
-	private static String urlGetAnimalByUserId = "/avaliacoes-por-ids";
-	private static String urlGetFamilyAnimals = "/animais-da-familia";
-	private static String urlNewAnimal = "/novo-animal";
-	private static String urlGetAnimalIdReviews = "/avaliacoes-por-ids";
-	private static String urlGetUserFamilyAnimals = "/animais-da-familia-para-usuario";
+
+    private static String urlGetQuizzes = "/quizzes";
+	private static String urlGetQuizById = "/quiz-by-id";
 
 	private ArrayList<NameValuePair> params;
 	private ArrayList<NameValuePair> headers;
@@ -63,92 +61,27 @@ public class HttpUtil {
 		return url + urlGetUserById;
 	}
 
-	public static void setUrlGetUserId(String urlGetUserID) {
-		HttpUtil.urlGetUserById = urlGetUserID;
-	}
-
-	public static String getUrlGetFamilyAnimals() {
-		return url + urlGetFamilyAnimals;
-	}
-
-	public static void setUrlGetFamilyAnimals(String urlGetFamilyAnimals) {
-		HttpUtil.urlGetFamilyAnimals = urlGetFamilyAnimals;
-	}
-
-	public static String getUrlGetAnimalIdReviews() {
-		return url + urlGetAnimalIdReviews;
-	}
-
-	public static void setUrlGetAnimalIdReviews(String urlGetAnimalIdReviews) {
-		HttpUtil.urlGetAnimalIdReviews = urlGetAnimalIdReviews;
-	}
-
-	public static String getUrlGetUserFamilyAnimals() {
-		return url + urlGetUserFamilyAnimals;
-	}
-
-	public static void setUrlGetUserFamilyAnimals(String urlGetUserFamilyAnimals) {
-		HttpUtil.urlGetUserFamilyAnimals = urlGetUserFamilyAnimals;
-	}
-
-	public static String getUrlGetAnimalByUserId() {
-		return url + urlGetAnimalByUserId;
-	}
-
-	public static void setUrlGetAnimalByUserId(String urlGetAnimalUserId) {
-		HttpUtil.urlGetAnimalByUserId = urlGetAnimalUserId;
-	}
-
 	public static String getUrlGetUserById() {
 		return url + urlGetUserById;
-	}
-
-	public static void setUrlGetUserById(String urlGetUserById) {
-		HttpUtil.urlGetUserById = urlGetUserById;
 	}
 
 	public static String getUrlGetUserByLoginPassword() {
 		return url + urlGetUserByLoginPassword;
 	}
 
-	public static void setUrlGetUserByLoginPassword(String urlGetUserByLoginPassword) {
-		HttpUtil.urlGetUserByLoginPassword = urlGetUserByLoginPassword;
-	}
-
-	public static String getUrlGetUserByFacebookId() {
-		return url +  urlGetUserByFacebookId;
-	}
-
-	public static void setUrlGetUserByFacebookId(String urlGetUserByFacebookId) {
-		HttpUtil.urlGetUserByFacebookId = urlGetUserByFacebookId;
-	}
-
 	public static String getUrlNewUser() {
 		return url +  urlNewUser;
 	}
 
-	public static void setUrlNewUser(String urlNewUser) {
-		HttpUtil.urlNewUser = urlNewUser;
-	}
+    public static String getUrlGetQuizzes() {
+        return urlGetQuizzes;
+    }
 
-	public static String getUrlNewAnimal() {
-		return url + urlNewAnimal;
-	}
+    public static String getUrlGetQuizById() {
+        return urlGetQuizById;
+    }
 
-	public static void setUrlNewAnimal(String urlNewAnimal) {
-		HttpUtil.urlNewAnimal = urlNewAnimal;
-	}
-
-	public static String getUrl() {
-		return url;
-	}
-
-	public static void setUrl(String url) {
-		HttpUtil.url = url;
-	}
-	
-
-	public void AddParam(String name, String value) {
+    public void AddParam(String name, String value) {
 		params.add(new BasicNameValuePair(name, value));
 	}
 
