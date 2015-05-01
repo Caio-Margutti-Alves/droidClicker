@@ -23,15 +23,26 @@
 
         />
 
-    <org.eazegraph.lib.charts.PieChart
+    <org.eazegraph.lib.charts.BarChart
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pie_statistics"
+        android:id="@+id/bar_correct_wrong"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity='center'
-        android:padding="8dp"
-        app:egLegendTextSize="18sp"
-        app:egUsePieRotation="true"
-        app:egValueTextSize="36sp"/>
+        android:layout_height="256dp"
+        android:padding="10dp"
+        app:egFixedBarWidth="true"
+        app:egBarWidth="20dp"
+        app:egLegendHeight="40dp"/>
+
+    <org.eazegraph.lib.charts.LineChart
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/line_time_question"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:egUseCubic="true"
+        app:egUseOverlapFill="true"
+        app:egCurveSmoothness="0.4"
+        app:egIndicatorLineColor="#FE6DA8"
+        app:egLegendHeight="40dp"
+        app:egShowStandardValue="true"/>
 
 </LinearLayout>

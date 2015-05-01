@@ -19,12 +19,12 @@ public abstract class User {
 
 	}
 	
-	public static boolean newUser(String facebookId, String login, String password,
-			String mobileToken, String firstName, String lastName,
-			String email, String dob) {
+	public static boolean newUser(String login, String password,
+			String firstName, String lastName,
+			String email) {
 
-		return JsonUser.newUser(facebookId, login, password, mobileToken, firstName,
-                lastName, email, dob);
+		return JsonUser.newUser(login, password, firstName,
+                lastName, email);
 		
 	}
 	

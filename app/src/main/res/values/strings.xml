@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!-- UTIL -->
     <string name="app_name">droidClicker</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="example">This is an Example</string>
+    <string name="clear"></string>
 
     <string name="developed">Caio Margutti Alves \n Carlos Daniel Drury \n Remy de Fru</string>
 
-    <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="clear"></string>
 
-    <!-- Dialog -->
-    <string name="dialog_mark">What do you want to mark here?</string>
-    <string name="dialog_maps_styles">Which style of maps do you want to use?</string>
-    <string name="dialog_trails_options">Which trail are you searching for?</string>
+    <!-- Quiz - Question -->
+    <string name="number">10</string>
+    <string name="quiz">Quiz 1</string>
+    <string name="question">What is the number of this question?</string>
+
+
 
 
     <!-- Strings related to login -->
@@ -70,11 +73,12 @@
 
     <!-- Settings -->
     <string name="title_activity_settings">Settings</string>
-    <string name="gender">Gender:</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
     <string name="search_radius">Search radius:</string>
     <string name="invite">Invite</string>
     <string name="album_name">droidClickerPhotos</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title">Retrieval Error</string>
+    <string name="dialog_message">We could not retrieve the data. Have you checked your internet connection?</string>
 
 </resources>

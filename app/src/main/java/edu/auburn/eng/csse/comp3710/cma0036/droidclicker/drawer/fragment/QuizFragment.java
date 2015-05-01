@@ -1,122 +1,247 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment;
 
-import android.app.ListFragment;
-import android.content.Context;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SeekBar;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.FontAwesomeText;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
-import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.navigation.NavigationMain;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.RegisterAccountActivity;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
-import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.user.User;
-import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.viewUtils.RangeSeekBar;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.alternatives.Alternative;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.Question;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
 
 /**
  * Created by caioa_000 on 23/04/2015.
  */
 public class QuizFragment extends Fragment {
 
-    private QuizzesLoadingTask authTask = null;
+   // private QuestionsLoadingTask authTask = null;
 
-    /*@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        String item = (String) getListAdapter().getItem(position);
-        //if (item.equals(getString(R.string.find_partners))) {
-            //Intent intent = new Intent(this, FindPartnerActivity.class);
-            //startActivity(intent);
-       // }
-            Toast.makeText(this.getActivity(), item + " selected", Toast.LENGTH_LONG).show();
-    }*/
+    private static final String TAG_QUIZ = "Quiz";
 
+    private QuestionsLoadingTask authTask = null;
 
-    public static QuizFragment newInstance(String sentence) {
-        QuizFragment QuizFragment = new QuizFragment();
+    private LinearLayout layout_alternatives = null;
+    private ScrollView layoutList = null;
+    private View loadQuestionStatusView;
 
-        Bundle args = new Bundle();
-        //args.putString(TAG_HAIKU_TEXT, sentence);
-        QuizFragment.setArguments(args);
+    private Quiz quiz;
+    private ArrayList<Question> questions;
 
-        return QuizFragment;
+    private FontAwesomeText txtv_num_quiz;
+    private FontAwesomeText txtv_num_question;
+    private FontAwesomeText txtv_question;
+
+    private Chronometer chrono;
+
+    private int duration;
+
+    public QuizFragment newInstance(String text, Quiz quiz){
+        QuizFragment mFragment = new QuizFragment();
+
+        Bundle mBundle = new Bundle();
+        mBundle.putString(Constant.TEXT_FRAGMENT, text);
+        mBundle.putSerializable(TAG_QUIZ, quiz);
+        mFragment.setArguments(mBundle);
+
+        return mFragment;
+    }
+
+    Chronometer.OnChronometerTickListener lstn_chrono = new Chronometer.OnChronometerTickListener() {
+        public void onChronometerTick(Chronometer chronometer) {
+            long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+            if (duration <= elapsedMillis/1000){
+                Toast.makeText(chronometer.getContext(), "Time is Over!", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    Button.OnClickListener lstnSubmit = new Button.OnClickListener() {
+        public void onClick(View view) {
+            if(questions.size()!=0)setLayoutNewQuestion();
+            else Toast.makeText(view.getContext(),"End of Questions", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            quiz = (Quiz) savedInstanceState.getSerializable(TAG_QUIZ);
+        }else {
+            quiz = new Quiz();
+
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(TAG_QUIZ, quiz);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // TODO Auto-generated method stub
             View rootView = inflater.inflate(R.layout.fragment_quiz, container, false);
             super.onCreate(savedInstanceState);
 
-            final ListView listview = (ListView) rootView.findViewById(R.id.lst_quizzes);
+            chrono = (Chronometer) rootView.findViewById(R.id.chr_duration);
 
-            String[] values = new String[] { "Android", "iPhone",};
+            layoutList = (ScrollView) rootView.findViewById(R.id.layout_question);
+            loadQuestionStatusView = rootView.findViewById(R.id.layout_load_status);
+            layout_alternatives = (LinearLayout) rootView.findViewById(R.id.layout_alternatives);
 
-            final ListArrayAdpater adapter = new ListArrayAdpater(this.getActivity(), values);
-            listview.setAdapter(adapter);
+            txtv_num_quiz = (FontAwesomeText) rootView.findViewById(R.id.txtv_quiz);
+            txtv_question = (FontAwesomeText) rootView.findViewById(R.id.txtv_question);
+            txtv_num_question = (FontAwesomeText) rootView.findViewById(R.id.txtv_num_question);
 
-
-            rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT ));
-            return rootView;
+        if (getArguments()!= null) {
+            quiz = (Quiz) getArguments().getSerializable(TAG_QUIZ);
+            duration = Integer.parseInt(quiz.getDuration());
+            txtv_num_quiz.setText("Quiz " + quiz.getId());
         }
 
+        return rootView;
+    }
 
-    public class ListArrayAdpater extends ArrayAdapter<String> {
-        private final Context context;
-        private final String[] values;
+    @Override
+    public void onStart() {
+        super.onResume();
+        attemptQuestionsRetrieve();
+    }
 
-        public ListArrayAdpater(Context context, String[] values) {
-            super(context, R.layout.list_item_layout, values);
-            this.context = context;
-            this.values = values;
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        chrono.setOnChronometerTickListener(lstn_chrono);
+        chrono.setBase(SystemClock.elapsedRealtime());
+        chrono.start();
+        Toast.makeText(this.getActivity(), quiz.getDuration(), Toast.LENGTH_LONG).show();
+    }
 
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = null;
+    public void setLayoutNewQuestion(){
+        if(questions.size()!=0){
+               Question question = questions.remove(0);
 
-            rowView = inflater.inflate(R.layout.list_item_layout, parent,false);
-            TextView txtTitle = (TextView) rowView.findViewById(R.id.firstLine);
-            TextView txtDescription = (TextView) rowView.findViewById(R.id.secondLine);
-            ImageView imgvIcon = (ImageView) rowView.findViewById(R.id.icon);
-            txtTitle.setText(values[position]);
-            String s = values[position];
-            /*if (s.equals(context.getString(R.string.find_partners))) {
-                imgvIcon.setImageResource(R.drawable.ic_action_find_partner);
-                txtDescription.setText(R.string.d_find_partners);
-            }*/
+                txtv_question.setText(question.getEnunciate());
+                txtv_num_question.setText(question.getId());
 
-            return rowView;
+                layout_alternatives.removeAllViews();
+
+            GradientDrawable shape= new GradientDrawable();
+            shape.setColor(getResources().getColor(R.color.green_light));
+            shape.setCornerRadius(10);
+
+                for(Alternative alternative: question.getAlternatives()) {
+                    //Toast.makeText(this.getActivity(), alternative.getDescription(), Toast.LENGTH_LONG).show();
+
+                    Button btn_alternative = new Button(getActivity());
+                    btn_alternative.setText(alternative.getDescription());
+                    btn_alternative.setTextSize(22);
+                    btn_alternative.setBackground(shape);
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(30,10,30,10);
+                    btn_alternative.setLayoutParams(params);
+                    //btn_alternative.setBackgroundColor(getResources().getColor(R.color.green_light));
+                    btn_alternative.setOnClickListener(lstnSubmit);
+
+
+                    layout_alternatives.addView(btn_alternative);
+
+                }
+         }else Toast.makeText(getActivity(), "End of Questions", Toast.LENGTH_LONG).show();
+    }
+
+
+    public void onAlternativeClicked(){
+        setLayoutNewQuestion();
+    }
+
+    public void attemptQuestionsRetrieve(){
+        showProgress(true);
+        authTask = new QuestionsLoadingTask();
+        authTask.execute((Void) null);
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            loadQuestionStatusView.setVisibility(View.VISIBLE);
+            loadQuestionStatusView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            loadQuestionStatusView.setVisibility(show ? View.VISIBLE
+                                    : View.GONE);
+                        }
+                    });
+
+            layoutList.setVisibility(View.VISIBLE);
+            layoutList.animate().setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            layoutList.setVisibility(show ? View.GONE
+                                    : View.VISIBLE);
+                        }
+                    });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            loadQuestionStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutList.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
-    public class QuizzesLoadingTask extends AsyncTask<Void, Void, Boolean> {
+    public class QuestionsLoadingTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
+
             try {
-                Quiz.get();
+                quiz.getQuestionsFromQuiz();
+                questions = quiz.getQuestions();
             } catch (Exception e) {
                 return false;
             }
 
-            if (User.getId()== null || User.getId().isEmpty())return false;
+            if (questions== null)return false;
             return true;
         }
 
@@ -126,9 +251,11 @@ public class QuizFragment extends Fragment {
             showProgress(false);
 
             if (success) {
-
+                setLayoutNewQuestion();
             } else {
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
+                AlertDialog dialog = builder.create();
             }
         }
 
@@ -138,8 +265,9 @@ public class QuizFragment extends Fragment {
             showProgress(false);
         }
     }
+    
 }
 
-}
+
 
 

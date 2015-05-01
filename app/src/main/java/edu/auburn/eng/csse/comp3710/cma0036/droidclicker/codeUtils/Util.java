@@ -28,10 +28,10 @@ public class Util {
 	}
 
     public static String fix(String in) {
-        in.replaceAll("&quot;", "\"");
-        in.replaceAll("&amp;", "&");
-        in.replaceAll("&lt;", "<");
-        in.replaceAll("&gt;", ">");
+        in = in.replaceAll("&quot;", "\"");
+        in = in.replaceAll("&amp;", "&");
+        in = in.replaceAll("&lt;", "<");
+        in = in.replaceAll("&gt;", ">");
         return in;
     }
 

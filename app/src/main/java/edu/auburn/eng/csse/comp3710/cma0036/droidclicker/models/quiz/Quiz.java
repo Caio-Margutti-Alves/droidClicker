@@ -1,23 +1,23 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz;
 
-import android.graphics.Bitmap;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 
-public class Quiz {
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.JsonQuestion;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.Question;
+
+public class Quiz implements Serializable {
 
     private String id;
-    private LinkedList<Question> questions;
+    private ArrayList<Question> questions;
     private String duration;
     private String owner;
 
-    protected Quiz() {
+    public Quiz() {
     }
 
-    public Quiz(LinkedList<Question> questions, String duration, String owner) {
+    public Quiz(ArrayList<Question> questions, String duration, String owner) {
         this.questions = questions;
         this.duration = duration;
         this.owner = owner;
@@ -31,11 +31,11 @@ public class Quiz {
         this.id = id;
     }
 
-    public LinkedList<Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(LinkedList<Question> questions) {
+    public void setQuestions(ArrayList<Question> questions) {
         this.questions = questions;
     }
 
@@ -55,8 +55,8 @@ public class Quiz {
         this.owner = owner;
     }
 
-    public static ArrayList<Quiz> getQuizzes() {
-        return JsonQuiz.getQuizzes();
+    public void getQuestionsFromQuiz() {
+        this.questions = JsonQuestion.getQuestionsByQuizId(getId());
     }
 
 }

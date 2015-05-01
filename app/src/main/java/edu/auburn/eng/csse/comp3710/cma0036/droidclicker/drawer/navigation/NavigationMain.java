@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
@@ -24,39 +26,22 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.util.SparseIntArray;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-//import br.liveo.interfaces.NavigationLiveoListener;
-//import br.liveo.navigationliveo.NavigationLiveo;
-
-import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.adapter.NavigationAdapter;
-//import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.MapFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ProfileFragment;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizCollectionFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.SettingsFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Menus;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Utils;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
 
-public class NavigationMain extends ActionBarActivity {
-
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+public class NavigationMain extends ActionBarActivity implements QuizCollectionFragment.QuizCollectionFragmentInterface {
 
     private int mLastPosition = 0;
 	private ListView mListDrawer;    
@@ -68,7 +53,9 @@ public class NavigationMain extends ActionBarActivity {
 	private FragmentManager mFragmentManager;
 	private NavigationAdapter mNavigationAdapter;
 	private ActionBarDrawerToggleCompat mDrawerToggle;
-		
+
+    private static final String TAG_QUIZ_COLLECTION = "QuizCollectionFragment";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
@@ -128,7 +115,7 @@ public class NavigationMain extends ActionBarActivity {
 		
 		switch (posicao) {
             case Constant.MENU_QUIZZES:
-                mFragment = new QuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
+                mFragment = new QuizCollectionFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
                 break;
             case Constant.MENU_PROFILE:
                 mFragment = new ProfileFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_PROFILE));
@@ -329,7 +316,17 @@ public class NavigationMain extends ActionBarActivity {
 	    }
 
 
+    public void onQuizClicked(Quiz quiz){
 
+        Fragment mFragment = new QuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES),quiz);
+        mNavigationAdapter.resetarCheck();
+        //mNavigationAdapter.setChecked(posicao, true);
+
+        mFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.addToBackStack(TAG_QUIZ_COLLECTION);
+        transaction.replace(R.id.content_frame, mFragment).commit();
+    }
 
 
 }

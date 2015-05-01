@@ -249,8 +249,8 @@ public class RegisterAccountActivity extends CameraActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				User.newUser(null, login, password, mobileToken, firstName, lastName,
-						email, dob);
+				User.newUser(login, password, firstName, lastName,
+						email);
 			} catch (Exception e) {
 				return false;
 			}

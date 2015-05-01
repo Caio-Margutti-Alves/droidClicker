@@ -33,13 +33,8 @@ public class ProfileFragment extends Fragment {
 
 	private EditText edtFisrtName;
 	private EditText edtLastName;
-	private EditText edtAge;
-	private EditText edtGender;
-	private EditText edtPassword;
 	private EditText edtEmail;
 	private EditText edtLogin;
-	private Button btnMale;
-	private Button btnFemale;
 	private ImageView profilePicture;
 
 	public ProfileFragment newInstance(String text){

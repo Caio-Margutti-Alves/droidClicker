@@ -3,11 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bootstrap="http://schemas.android.com/apk/res-auto"
     xmlns:fontawesometext="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    style="@style/LoginFormContainer"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity='center'
@@ -15,6 +17,7 @@
         android:id="@+id/btn_alternative"
         bootstrap:bb_type="success"
         bootstrap:bb_icon_right="fa-android"
+        bootstrap:bb_roundedCorners="true"
         />
 
 </LinearLayout>

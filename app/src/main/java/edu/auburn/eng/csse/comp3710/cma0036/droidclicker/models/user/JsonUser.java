@@ -29,14 +29,14 @@ public class JsonUser {
 		client.AddParam(TAG_USER_BY + TAG_ID, id);
 
 		try {
-			client.Execute(HttpUtil.RequestMethod.POST, HttpUtil.getUrlGetUserById());
+			client.Execute(HttpUtil.RequestMethod.GET, HttpUtil.getUrlGetUserById());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 
 		//System.out.println(client.getResponse());
-		parseJsonUser(client.getResponse());
+		parseJsonUser(Util.fix(client.getResponse()));
 		return true;
 	}
 	
@@ -56,13 +56,12 @@ public class JsonUser {
 
 
 		System.out.println(client.getResponse());
-        parseJsonUser(client.getResponse());
+        parseJsonUser(Util.fix(client.getResponse()));
 		return true;
 	}
 
 	public static void parseJsonUser(String in) {
 		try {
-            in.replaceAll("&quot;", "\"");
 			JSONObject reader = new JSONObject(in);
             JSONArray jsonUsers = reader.getJSONArray(TAG_USERS);
 
@@ -87,9 +86,9 @@ public class JsonUser {
 
 	}
 
-	public static boolean newUser(String facebookId, String login, String password,
-			String mobileToken, String firstName, String lastName,
-			String email, String dob) {
+	public static boolean newUser(String login, String password,
+			String firstName, String lastName,
+			String email) {
 
 		HttpUtil client = new HttpUtil();
 
@@ -102,7 +101,7 @@ public class JsonUser {
 
 
 		try {
-			client.Execute(HttpUtil.RequestMethod.POST, HttpUtil.getUrlNewUser());
+			client.Execute(HttpUtil.RequestMethod.GET, HttpUtil.getUrlNewUser());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
