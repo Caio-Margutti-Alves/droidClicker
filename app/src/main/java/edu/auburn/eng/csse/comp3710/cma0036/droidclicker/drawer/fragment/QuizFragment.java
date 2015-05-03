@@ -34,8 +34,11 @@ import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.RegisterAccountActivity;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.alternatives.Alternative;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.answer.Answer;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.answer.AnswerCollection;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.Question;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.user.User;
 
 /**
  * Created by caioa_000 on 23/04/2015.
@@ -53,7 +56,10 @@ public class QuizFragment extends Fragment {
     private View loadQuestionStatusView;
 
     private Quiz quiz;
+    private Question cur_question;
+    private AnswerCollection answers;
     private ArrayList<Question> questions;
+    private ArrayList<Alternative> alternatives;
 
     private FontAwesomeText txtv_num_quiz;
     private FontAwesomeText txtv_num_question;
@@ -61,7 +67,7 @@ public class QuizFragment extends Fragment {
 
     private Chronometer chrono;
 
-    private int duration;
+    private int duration = Integer.MAX_VALUE;
 
     public QuizFragment newInstance(String text, Quiz quiz){
         QuizFragment mFragment = new QuizFragment();
@@ -79,14 +85,26 @@ public class QuizFragment extends Fragment {
             long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
             if (duration <= elapsedMillis/1000){
                 Toast.makeText(chronometer.getContext(), "Time is Over!", Toast.LENGTH_LONG).show();
+                chronometer.stop();
             }
         }
     };
 
     Button.OnClickListener lstnSubmit = new Button.OnClickListener() {
         public void onClick(View view) {
-            if(questions.size()!=0)setLayoutNewQuestion();
-            else Toast.makeText(view.getContext(),"End of Questions", Toast.LENGTH_LONG).show();
+            Answer answer = new Answer(cur_question.getId(), String.valueOf(view.getId()), User.getId());
+            answers.add(answer);
+
+            if(questions.size()>0){
+                setLayoutNewQuestion();
+            }
+            else{
+                String text = "";
+                for(Answer ans : answers.getAnswers())text+= ans.getId_alternative() + " ";
+                Toast.makeText(view.getContext(), text, Toast.LENGTH_LONG).show();
+
+                //answers.NewAnswers();
+            }
         }
     };
 
@@ -111,7 +129,11 @@ public class QuizFragment extends Fragment {
             View rootView = inflater.inflate(R.layout.fragment_quiz, container, false);
             super.onCreate(savedInstanceState);
 
+            answers = new AnswerCollection();
+
             chrono = (Chronometer) rootView.findViewById(R.id.chr_duration);
+            chrono.setOnChronometerTickListener(lstn_chrono);
+            chrono.setBase(SystemClock.elapsedRealtime());
 
             layoutList = (ScrollView) rootView.findViewById(R.id.layout_question);
             loadQuestionStatusView = rootView.findViewById(R.id.layout_load_status);
@@ -127,38 +149,35 @@ public class QuizFragment extends Fragment {
             txtv_num_quiz.setText("Quiz " + quiz.getId());
         }
 
+        attemptQuestionsRetrieve();
+
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onResume();
-        attemptQuestionsRetrieve();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        chrono.setOnChronometerTickListener(lstn_chrono);
-        chrono.setBase(SystemClock.elapsedRealtime());
-        chrono.start();
-        Toast.makeText(this.getActivity(), quiz.getDuration(), Toast.LENGTH_LONG).show();
     }
 
     public void setLayoutNewQuestion(){
-        if(questions.size()!=0){
-               Question question = questions.remove(0);
+               cur_question = questions.remove(0);
 
-                txtv_question.setText(question.getEnunciate());
-                txtv_num_question.setText(question.getId());
+                txtv_question.setText(cur_question.getEnunciate());
+                txtv_num_question.setText(cur_question.getId());
 
                 layout_alternatives.removeAllViews();
 
             GradientDrawable shape= new GradientDrawable();
             shape.setColor(getResources().getColor(R.color.green_light));
             shape.setCornerRadius(10);
+            alternatives = cur_question.getAlternatives();
 
-                for(Alternative alternative: question.getAlternatives()) {
+                for(Alternative alternative: alternatives) {
                     //Toast.makeText(this.getActivity(), alternative.getDescription(), Toast.LENGTH_LONG).show();
 
                     Button btn_alternative = new Button(getActivity());
@@ -172,12 +191,11 @@ public class QuizFragment extends Fragment {
                     btn_alternative.setLayoutParams(params);
                     //btn_alternative.setBackgroundColor(getResources().getColor(R.color.green_light));
                     btn_alternative.setOnClickListener(lstnSubmit);
-
+                    btn_alternative.setId(Integer.parseInt(alternative.getId()));
 
                     layout_alternatives.addView(btn_alternative);
 
                 }
-         }else Toast.makeText(getActivity(), "End of Questions", Toast.LENGTH_LONG).show();
     }
 
 
@@ -252,6 +270,7 @@ public class QuizFragment extends Fragment {
 
             if (success) {
                 setLayoutNewQuestion();
+                chrono.start();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);

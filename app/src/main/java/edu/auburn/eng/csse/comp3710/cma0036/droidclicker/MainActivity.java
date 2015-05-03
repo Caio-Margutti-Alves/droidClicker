@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PieChart mPieChart = (PieChart) findViewById(R.id.pie_statistics);
+        /*PieChart mPieChart = (PieChart) findViewById(R.id.pie_statistics);
 
         mPieChart.addPieSlice(new PieModel("Freetime", 15, Color.parseColor("#FE6DA8")));
         mPieChart.addPieSlice(new PieModel("Sleep", 25, Color.parseColor("#56B7F1")));
@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
 
         mPieChart.startAnimation();
 
-        BootstrapButton btn_success = (BootstrapButton) findViewById(R.id.btn_success);
+        BootstrapButton btn_success = (BootstrapButton) findViewById(R.id.btn_success);*/
     }
 
 

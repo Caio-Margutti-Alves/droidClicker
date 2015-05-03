@@ -33,9 +33,13 @@ public class HttpUtil {
 
     private static String urlGetQuestions = "/questions";
 
-    private static String urlGetQuestionByQuizId = "/question-by-id";
+    private static String urlGetQuestionByQuizId = "/questions-from-quiz";
 
     private static String urlGetAlternativesFromQuestion = "/alternatives-from-question";
+
+    private static String urlGetAnswerByUser = "/answers-by-user";
+    private static String urlGetAnswersByQuiz = "/answers-by-quiz";
+    private static String urlSetNewAnswer = "/insert-user";
 
 
 	private ArrayList<NameValuePair> params;
@@ -96,8 +100,20 @@ public class HttpUtil {
         return url +  urlGetQuestionByQuizId;
     }
 
+    public static String getUrlGetAnswerByUser() {
+        return url +  urlGetAnswerByUser;
+    }
+
+    public static String getUrlGetAnswersByQuiz() {
+        return url +  urlGetAnswersByQuiz;
+    }
+
     public static String getUrlGetAlternativesFromQuestion() {
         return url +  urlGetAlternativesFromQuestion;
+    }
+
+    public static String getUrlSetNewAnswer() {
+        return url +  urlSetNewAnswer;
     }
 
 

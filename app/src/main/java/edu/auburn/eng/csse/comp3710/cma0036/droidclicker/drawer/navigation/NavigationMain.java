@@ -26,12 +26,14 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.adapter.NavigationAdapter;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.CreateQuizFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ProfileFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizCollectionFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizFragment;
@@ -55,6 +57,8 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 	private ActionBarDrawerToggleCompat mDrawerToggle;
 
     private static final String TAG_QUIZ_COLLECTION = "QuizCollectionFragment";
+    private static final String TAG_CREATE_QUIZ = "CreateQuizFragment";
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +141,15 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 	}
 
     private void hideMenus(Menu menu, int posicao) {
-    	    	
-        boolean drawerOpen = mLayoutDrawer.isDrawerOpen(mRelativeDrawer);    	
-    	
-        switch (posicao) {
+        boolean drawerOpen = mLayoutDrawer.isDrawerOpen(mRelativeDrawer);
 
+        switch (posicao) {
+            case R.id.action_settings:
+                menu.getItem(R.id.action_new).setVisible(false);
+                break;
+            default:
+                //menu.getItem(R.id.action_new).setVisible(true);
+                break;
 		}  
     }	
 
@@ -158,23 +166,23 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 	}
 	
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {  
-        		
-		switch (item.getItemId()) {		
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
 		case Menus.HOME:
 			if (mLayoutDrawer.isDrawerOpen(mRelativeDrawer)) {
 				mLayoutDrawer.closeDrawer(mRelativeDrawer);
 			} else {
 				mLayoutDrawer.openDrawer(mRelativeDrawer);
 			}
-			return true;			
+			return true;
 		default:
-			
+
 	        if (mDrawerToggle.onOptionsItemSelected(item)) {
 	            return true;
-	        }		
-			
-			return super.onOptionsItemSelected(item);			
+	        }
+
+			return super.onOptionsItemSelected(item);
 		}		             
     }
 		
@@ -186,9 +194,10 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		return super.onCreateOptionsMenu(menu);        		
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);	     
@@ -319,6 +328,21 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
     public void onQuizClicked(Quiz quiz){
 
         Fragment mFragment = new QuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES),quiz);
+        mNavigationAdapter.resetarCheck();
+        //mNavigationAdapter.setChecked(posicao, true);
+
+        mFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.addToBackStack(TAG_QUIZ_COLLECTION);
+        transaction.replace(R.id.content_frame, mFragment).commit();
+
+
+    }
+
+
+    public void onNewQuizClicked(){
+
+        Fragment mFragment = new CreateQuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
         mNavigationAdapter.resetarCheck();
         //mNavigationAdapter.setChecked(posicao, true);
 

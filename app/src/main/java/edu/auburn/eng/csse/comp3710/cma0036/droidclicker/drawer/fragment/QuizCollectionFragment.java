@@ -11,20 +11,27 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.CreateQuizFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Menus;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.QuizCollection;
 
@@ -71,9 +78,10 @@ public class QuizCollectionFragment extends ListFragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // TODO Auto-generated method stub
             View rootView = inflater.inflate(R.layout.fragment_quiz_collection, container, false);
             super.onCreate(savedInstanceState);
+
+            setHasOptionsMenu(true);
 
             quizCollection = new QuizCollection();
 
@@ -83,6 +91,27 @@ public class QuizCollectionFragment extends ListFragment {
             rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT ));
             return rootView;
        }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_new, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_new:
+                ((QuizCollectionFragmentInterface)activity).onNewQuizClicked();
+                break;
+            default:
+                //menu.getItem(R.id.action_new).setVisible(true);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onResume() {
@@ -206,6 +235,7 @@ public class QuizCollectionFragment extends ListFragment {
 
     public interface QuizCollectionFragmentInterface {
         public void onQuizClicked(Quiz quiz);
+        public void onNewQuizClicked();
     }
 
 }

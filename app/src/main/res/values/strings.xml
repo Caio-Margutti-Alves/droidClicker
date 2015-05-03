@@ -17,9 +17,12 @@
     <string name="number">10</string>
     <string name="quiz">Quiz 1</string>
     <string name="question">What is the number of this question?</string>
+    <string name="create_quiz">Create Quiz</string>
+    <string name="prompt_question">Question Enunciate</string>
+    <string name="prompt_alternative">Alternative Description</string>
 
-
-
+    <!-- Menus -->
+    <string name="action_new">Create Quiz</string>
 
     <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
