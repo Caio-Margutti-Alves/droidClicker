@@ -39,7 +39,7 @@ public class HttpUtil {
 
     private static String urlGetAnswerByUser = "/answers-by-user";
     private static String urlGetAnswersByQuiz = "/answers-by-quiz";
-    private static String urlSetNewAnswer = "/insert-user";
+    private static String urlSetNewAnswer = "/insert-answer";
 
 
 	private ArrayList<NameValuePair> params;

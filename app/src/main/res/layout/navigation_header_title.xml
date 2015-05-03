@@ -35,6 +35,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:visibility="gone"
-        android:background="@color/blue_dark" />
+        android:background="@color/green_light" />
 
 </RelativeLayout>

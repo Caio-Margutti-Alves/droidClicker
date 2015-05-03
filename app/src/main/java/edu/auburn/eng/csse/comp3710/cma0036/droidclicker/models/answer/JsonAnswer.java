@@ -16,7 +16,7 @@ public class JsonAnswer {
 	private static final String TAG_ID_QUESTION = "id_question";
     private static final String TAG_ID = "id";
 	private static final String TAG_ID_USER = "id_user";
-	private static final String TAG_ID_ALTERNATIVE = "id_alernative";
+	private static final String TAG_ID_ALTERNATIVE = "id_alternative";
 
     public static ArrayList<Answer> getAnswers(String id) {
         HttpUtil client = new HttpUtil();
@@ -74,6 +74,10 @@ public class JsonAnswer {
         HttpUtil client = new HttpUtil();
 
         for(Answer answer : answers.getAnswers()) {
+            System.out.println(answer.getId_user());
+            System.out.println(answer.getId_question());
+            System.out.println(answer.getId_alternative());
+
             client.AddParam(TAG_ID_USER, answer.getId_user());
             client.AddParam(TAG_ID_QUESTION, answer.getId_question());
             client.AddParam(TAG_ID_ALTERNATIVE, answer.getId_alternative());
@@ -83,11 +87,11 @@ public class JsonAnswer {
                 client.Execute(HttpUtil.RequestMethod.GET, HttpUtil.getUrlSetNewAnswer());
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println(e.toString());
                 return false;
             }
+            System.out.println(client.getResponse());
         }
-
-        System.out.println(client.getResponse());
         return true;
         //parseJsonUser(client.getResponse());
     }

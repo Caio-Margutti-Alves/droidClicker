@@ -42,8 +42,8 @@
     <string name="error_field_required">This field is required</string>
 
     <!-- Drawer -->
-    <string name="first_name">Caio</string>
-    <string name="last_name">Alves</string>
+    <string name="first_name">droidClicker</string>
+    <string name="last_name">droidClicker</string>
     <string name="drawer_open">Open drawer navigation</string>
     <string name="drawer_close">Navigation drawer Close</string>
 

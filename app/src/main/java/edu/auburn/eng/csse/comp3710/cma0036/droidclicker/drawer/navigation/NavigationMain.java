@@ -26,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,11 +38,11 @@ import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.CreateQ
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ProfileFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizCollectionFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizFragment;
-import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.SettingsFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Menus;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Utils;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.user.User;
 
 public class NavigationMain extends ActionBarActivity implements QuizCollectionFragment.QuizCollectionFragmentInterface {
 
@@ -50,7 +51,10 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 
 	private DrawerLayout mLayoutDrawer;
 	private RelativeLayout mUserDrawer;
-	private RelativeLayout mRelativeDrawer;	
+	private RelativeLayout mRelativeDrawer;
+
+    private TextView txtv_first_name;
+    private TextView txtv_last_name;
 
 	private FragmentManager mFragmentManager;
 	private NavigationAdapter mNavigationAdapter;
@@ -73,7 +77,14 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
         mListDrawer = (ListView) findViewById(R.id.listDrawer);        
 		mRelativeDrawer = (RelativeLayout) findViewById(R.id.relativeDrawer);		
 		mLayoutDrawer = (DrawerLayout) findViewById(R.id.layoutDrawer);
-		
+
+        txtv_first_name = (TextView) findViewById(R.id.txt_user_name_drawer);
+        txtv_last_name = (TextView) findViewById(R.id.txt_user_lastname_drawer);
+
+        txtv_first_name.setText(User.getFirstName());
+        txtv_last_name.setText(User.getLastName());
+
+
 		mUserDrawer = (RelativeLayout) findViewById(R.id.userDrawer);
 		mUserDrawer.setOnClickListener(userOnClick);
 		
@@ -82,14 +93,11 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 			// All header menus should be informed here
 			// listHeader.add(MENU POSITION)			
 			List<Integer> mListHeader = new ArrayList<Integer>();
-			//mListHeader.add(0);
-			//mListHeader.add(6);			
-			//mListHeader.add(10);
-						
+
 			// All menus which will contain an accountant should be informed here
 			// Counter.put ("POSITION MENU", "VALUE COUNTER");			
 			SparseIntArray  mCounter = new SparseIntArray();			
-			mCounter.put(Constant.MENU_QUIZZES,7);
+			mCounter.put(Constant.MENU_QUIZZES,6);
 			mNavigationAdapter = new NavigationAdapter(this, NavigationList.getNavigationAdapter(this, mListHeader, mCounter, null));
 		}
 		
@@ -123,9 +131,6 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
                 break;
             case Constant.MENU_PROFILE:
                 mFragment = new ProfileFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_PROFILE));
-                break;
-            case Constant.MENU_SETTINGS:
-                mFragment = new SettingsFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_SETTINGS));
                 break;
             case Constant.MENU_INVITE:
 			invite();

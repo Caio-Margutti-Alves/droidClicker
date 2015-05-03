@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"       
                 android:layout_below="@+id/userContent"         
-                android:background="@color/blue_dark" />
+                android:background="@color/green_light" />
 
             <ListView
                 android:id="@+id/listDrawer"
