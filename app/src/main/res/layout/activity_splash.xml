@@ -8,20 +8,28 @@ android:background="@color/white" >
 
 <ImageView
     android:id="@+id/imgLogo"
-    android:layout_weight="0.9"
+    android:layout_weight="0.8"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
     android:gravity="center"
     android:src="@drawable/placeholder_logo" />
 
+    <TextView
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="12dp"
+        android:textColor="@color/green_dark"
+        android:gravity="center"
+        android:text="@string/course" />
 
-<TextView
-    android:layout_weight="0.1"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:textSize="12dp"
-    android:textColor="@color/green_dark"
-    android:gravity="center_horizontal|top"
-    android:text="@string/developed" />
+    <TextView
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="12dp"
+        android:textColor="@color/green_dark"
+        android:gravity="center_horizontal|top"
+        android:text="@string/developed" />
 
 </LinearLayout>

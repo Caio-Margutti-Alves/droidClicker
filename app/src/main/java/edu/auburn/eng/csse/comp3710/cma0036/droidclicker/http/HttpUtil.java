@@ -27,6 +27,7 @@ public class HttpUtil {
     private static String urlGetUserById = "/user-by-id";
 	private static String urlGetUserByLoginPassword = "/user-by-login-password";
 	private static String urlNewUser = "/insert-user";
+    private static String urlUpdateUser = "/update-user";
 
     private static String urlGetQuizzes = "/quizzes";
 	private static String urlGetQuizById = "/quiz-by-id";
@@ -83,6 +84,10 @@ public class HttpUtil {
 	public static String getUrlNewUser() {
 		return url +  urlNewUser;
 	}
+
+    public static String getUrlUpdateUser() {
+        return url + urlUpdateUser;
+    }
 
     public static String getUrlGetQuizzes() {
         return url + urlGetQuizzes;

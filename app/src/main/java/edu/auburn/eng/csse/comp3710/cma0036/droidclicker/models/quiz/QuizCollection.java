@@ -1,12 +1,13 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.Question;
 
-public class QuizCollection {
+public class QuizCollection implements Serializable {
 
     private ArrayList<Quiz> quizzes;
 

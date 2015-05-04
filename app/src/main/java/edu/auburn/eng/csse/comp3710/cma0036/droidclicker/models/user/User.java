@@ -79,4 +79,14 @@ public abstract class User {
 		User.lastName = lastName;
 	}
 
+
+    public static boolean updateUser(String id, String login, String password,
+                                  String firstName, String lastName,
+                                  String email) {
+
+        return JsonUser.updateUser(id, login, password, firstName,
+                lastName, email);
+
+    }
+
 }

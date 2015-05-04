@@ -7,7 +7,7 @@ import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.R;
 public class Utils {
 
 	//Set all the navigation icons and always to set "zero 0" for the item is a category
-	public static int[] iconNavigation = new int[] {  /*R.drawable.ic_action_map,*/ R.drawable.ic_action_group,
+	public static int[] iconNavigation = new int[] {  /*R.drawable.ic_action_map,*/ R.drawable.ic_action_help,
             R.drawable.ic_action_person, R.drawable.ic_action_share};
 	
 	//get title of the item navigation

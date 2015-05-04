@@ -2,7 +2,9 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -38,13 +40,17 @@ import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.CreateQ
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ProfileFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizCollectionFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.QuizFragment;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment.ResultFragment;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Constant;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Menus;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.utils.Utils;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.answer.AnswerCollection;
+import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.questions.Question;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.user.User;
 
-public class NavigationMain extends ActionBarActivity implements QuizCollectionFragment.QuizCollectionFragmentInterface {
+public class NavigationMain extends ActionBarActivity implements QuizCollectionFragment.QuizCollectionFragmentInterface,
+        QuizFragment.QuizFragmentInterface, ProfileFragment.ProfileFragmentInterface {
 
     private int mLastPosition = 0;
 	private ListView mListDrawer;    
@@ -124,7 +130,7 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 
 		Fragment mFragment = null;
 		mFragmentManager = getSupportFragmentManager();
-		
+
 		switch (posicao) {
             case Constant.MENU_QUIZZES:
                 mFragment = new QuizCollectionFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
@@ -134,13 +140,14 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
                 break;
             case Constant.MENU_INVITE:
 			invite();
-			break;	
+			break;
 		}
 		
 		if (mFragment != null){
 			setTitleFragments(mLastPosition);
 			mNavigationAdapter.resetarCheck();		
-			mNavigationAdapter.setChecked(posicao, true);			
+			mNavigationAdapter.setChecked(posicao, true);
+
 			mFragmentManager.beginTransaction().replace(R.id.content_frame, mFragment).commit();
 		}
 	}
@@ -279,7 +286,7 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 			Intent emailIntent = new Intent();
 			emailIntent.setAction(Intent.ACTION_SEND);
 
-			emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(resources.getString(R.string.invite_message)));
+			emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.invite_message));
 			emailIntent.putExtra(Intent.EXTRA_SUBJECT,resources.getString(R.string.subject));
 			emailIntent.setType("message/rfc822");
 
@@ -331,19 +338,16 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 
 
     public void onQuizClicked(Quiz quiz){
-
         Fragment mFragment = new QuizFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES),quiz);
         mNavigationAdapter.resetarCheck();
         //mNavigationAdapter.setChecked(posicao, true);
 
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.addToBackStack(TAG_QUIZ_COLLECTION);
-        transaction.replace(R.id.content_frame, mFragment).commit();
+        transaction.replace(R.id.content_frame, mFragment).addToBackStack(TAG_QUIZ_COLLECTION).commit();
 
 
     }
-
 
     public void onNewQuizClicked(){
 
@@ -353,8 +357,40 @@ public class NavigationMain extends ActionBarActivity implements QuizCollectionF
 
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.addToBackStack(TAG_QUIZ_COLLECTION);
+        transaction.replace(R.id.content_frame, mFragment).addToBackStack(TAG_QUIZ_COLLECTION).commit();
+    }
+
+    public void onTimeIsOver(ArrayList<Question> questions, AnswerCollection answers){
+        Fragment mFragment = new ResultFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES), questions, answers);
+        mNavigationAdapter.resetarCheck();
+        //mNavigationAdapter.setChecked(posicao, true);
+
+        mFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.content_frame, mFragment).commit();
+    }
+
+    public void onQuizFinished(ArrayList<Question> questions, AnswerCollection answers){
+        onTimeIsOver(questions, answers);
+    }
+
+    public void onUserUpdated(){
+        Fragment mFragment = new QuizCollectionFragment().newInstance(Utils.getTitleItem(NavigationMain.this, Constant.MENU_QUIZZES));
+        mNavigationAdapter.resetarCheck();
+        //mNavigationAdapter.setChecked(posicao, true);
+
+        mFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.replace(R.id.content_frame, mFragment).addToBackStack(TAG_QUIZ_COLLECTION).commit();
+
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.user_updated)
+                .setTitle(R.string.user_updated_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                }).show();
     }
 
 

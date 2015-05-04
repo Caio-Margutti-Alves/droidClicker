@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -50,6 +51,8 @@ public class QuizCollectionFragment extends ListFragment {
     private LinearLayout layoutList = null;
     private View loadQuizStatusView;
 
+    private static final String TAG_QUIZ_COLLECTION = "QuizCollection";
+
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
         String item = (String) getListAdapter().getItem(pos);
@@ -70,10 +73,12 @@ public class QuizCollectionFragment extends ListFragment {
     public void refreshList() {
             int i = 0;
         String[] values = new String[quizCollection.getQuizzes().size()];
+        String[] descriptions = new String[quizCollection.getQuizzes().size()];
         for(Quiz quiz : quizCollection.getQuizzes()){
-            values[i++] = "Quiz " + quiz.getId();
+            values[i] = "Quiz " + quiz.getId();
+            descriptions[i++] = quiz.getDuration() + " seconds";
         }
-        adapter = new ListArrayAdpater(this.getActivity(), values);
+        adapter = new ListArrayAdpater(this.getActivity(), values, descriptions);
         setListAdapter(adapter);
     }
 
@@ -114,9 +119,17 @@ public class QuizCollectionFragment extends ListFragment {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        attemptQuizRetrieve();
+        System.out.println("ON START");
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
-        attemptQuizRetrieve();
+        System.out.println("ON Resume");
     }
 
     @Override
@@ -124,6 +137,13 @@ public class QuizCollectionFragment extends ListFragment {
         super.onAttach(activity);
         this.activity = activity;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(TAG_QUIZ_COLLECTION, quizCollection);
+    }
+
 
     public void attemptQuizRetrieve(){
         showProgress(true);
@@ -192,9 +212,14 @@ public class QuizCollectionFragment extends ListFragment {
             if (success) {
                 refreshList();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
-                AlertDialog dialog = builder.create();
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.dialog_message)
+                        .setTitle(R.string.dialog_title)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        }).show();
             }
         }
 
@@ -208,11 +233,13 @@ public class QuizCollectionFragment extends ListFragment {
     public class ListArrayAdpater extends ArrayAdapter<String> {
         private final Context context;
         private final String[] values;
+        private final String[] descriptions;
 
-        public ListArrayAdpater(Context context, String[] values) {
+        public ListArrayAdpater(Context context, String[] values, String[] descriptions) {
             super(context, R.layout.list_item_layout, values);
             this.context = context;
             this.values = values;
+            this.descriptions = descriptions;
         }
 
         @Override
@@ -224,10 +251,9 @@ public class QuizCollectionFragment extends ListFragment {
             TextView txtDescription = (TextView) rowView.findViewById(R.id.secondLine);
             ImageView imgvIcon = (ImageView) rowView.findViewById(R.id.icon);
 
-
             imgvIcon.setImageResource(R.drawable.default_user);
             txtTitle.setText(values[position]);
-            txtDescription.setText(quizCollection.getQuizzes().get(position).getDuration() + " seconds");
+            txtDescription.setText(descriptions[position]);
 
             return rowView;
         }

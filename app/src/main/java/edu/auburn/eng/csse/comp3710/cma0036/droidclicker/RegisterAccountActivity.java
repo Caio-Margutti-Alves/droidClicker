@@ -202,7 +202,7 @@ public class RegisterAccountActivity extends CameraActivity {
 			edtLogin.setError(getString(R.string.error_field_required));
 			focusView = edtLogin;
 			cancel = true;
-		} else if (login.length() < 8) {
+		} else if (login.length() < 6) {
 			edtLogin.setError(getString(R.string.error_invalid_login));
 			focusView = edtLogin;
 			cancel = true;

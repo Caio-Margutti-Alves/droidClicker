@@ -8,10 +8,21 @@
     <string name="action_settings">Settings</string>
     <string name="example">This is an Example</string>
     <string name="clear"></string>
-
+    <string name="album_name">droidPhotos</string>
+    <string name="ok">Ok</string>
     <string name="developed">Caio Margutti Alves \n Carlos Daniel Drury \n Remy de Fru</string>
+    <string name="course">Auburn University COMP3710 Spring 2015</string>
 
     <string name="title_activity_main">MainActivity</string>
+
+    <!-- User -->
+    <string name="user_updated">Your user has been updated!</string>
+    <string name="user_updated_title">User Update</string>
+
+
+    <!-- User -->
+    <string name="congratulations">Congratulations:</string>
+    <string name="try_again">Try Again:</string>
 
     <!-- Quiz - Question -->
     <string name="number">10</string>
@@ -20,6 +31,9 @@
     <string name="create_quiz">Create Quiz</string>
     <string name="prompt_question">Question Enunciate</string>
     <string name="prompt_alternative">Alternative Description</string>
+    <string name="time_over_title">Time Over</string>
+    <string name="time_over_message">Do not worry. You run out of time but all your answers so far are saved!</string>
+
 
     <!-- Menus -->
     <string name="action_new">Create Quiz</string>
@@ -51,12 +65,13 @@
     <!-- Invite -->
     <string name="subject">droidClicker</string>
     <string name="title_activity_invite">Share using&#8230;</string>
-    <string name="url_invite_message">https://sites.google.com/a/datafest.net/globalurbandatafest/projects/trailsystemauburn</string>
-    <string name="invite_message">Are you lost? Are you looking for something in your trail? Why do not you try Theseus and find your way! </string>
+    <string name="url_invite_message">https://play.google.com/store?hl=en</string>
+    <string name="invite_message">Why to pay for something your cellphone can do for free? Get now droidClicker: https://play.google.com/store?hl=en</string>
 
 
     <!-- Profile -->
     <string name="register">Register</string>
+    <string name="update">Update</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_email">Email</string>
@@ -73,12 +88,6 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="title_feature_list">Features</string>
     <string name="title_feature_detail">Feature Detail</string>
-
-    <!-- Settings -->
-    <string name="title_activity_settings">Settings</string>
-    <string name="search_radius">Search radius:</string>
-    <string name="invite">Invite</string>
-    <string name="album_name">droidClickerPhotos</string>
 
     <!-- Dialog -->
     <string name="dialog_title">Retrieval Error</string>

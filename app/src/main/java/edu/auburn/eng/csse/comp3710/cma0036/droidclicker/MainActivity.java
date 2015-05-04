@@ -1,15 +1,9 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker;
 
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.beardedhen.androidbootstrap.BootstrapButton;
-
-import org.eazegraph.lib.charts.PieChart;
-import org.eazegraph.lib.models.PieModel;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -17,7 +11,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_result);
 
         /*PieChart mPieChart = (PieChart) findViewById(R.id.pie_statistics);
 

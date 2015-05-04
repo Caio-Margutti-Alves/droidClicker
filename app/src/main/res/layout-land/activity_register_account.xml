@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    style="@style/LoginFormContainer" >
+    style="@style/LoginFormContainer"
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/container"
@@ -43,7 +43,7 @@
 
             <!-- Circle Thumbnail with Image -->
             <ImageView
-                android:id="@+id/imgvProfile"
+                android:id="@+id/imgvRegisterProfile"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:gravity="center"
@@ -62,6 +62,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     style="?android:attr/buttonBarStyle"
+                    android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp" >
 
                     <com.beardedhen.androidbootstrap.BootstrapButton
@@ -119,6 +120,7 @@
                         bootstrap:be_roundedCorners="true"
                         bootstrap:be_state="success"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -193,7 +195,7 @@
                         style="?android:attr/buttonBarButtonStyle"
                         android:paddingLeft="32dp"
                         android:paddingRight="32dp"
-                        android:text="@string/update"
+                        android:text="@string/register"
                         bootstrap:bb_roundedCorners="true"
                         bootstrap:bb_type="success"/>
                 </LinearLayout>

@@ -3,8 +3,11 @@ package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.drawer.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -48,15 +51,23 @@ public class QuizFragment extends Fragment {
    // private QuestionsLoadingTask authTask = null;
 
     private static final String TAG_QUIZ = "Quiz";
+    private static final String TAG_INDEX= "Index";
+    private static final String TAG_DURATION = "Duration";
+    private static final String TAG_ELAPSED = "Elapsed";
+    private static final String TAG_QUESTION_COLLECTION = "QuestionCollection";
+    private static final String TAG_ANSWER_COLLECTION = "AnswerCollection";
+
+    private Activity activity;
 
     private QuestionsLoadingTask authTask = null;
+    private AnswersDeliveryTask answersTask = null;
 
     private LinearLayout layout_alternatives = null;
     private ScrollView layoutList = null;
     private View loadQuestionStatusView;
 
     private Quiz quiz;
-    private Question cur_question;
+    private int index_cur_question = 0;
     private AnswerCollection answers;
     private ArrayList<Question> questions;
     private ArrayList<Alternative> alternatives;
@@ -68,6 +79,7 @@ public class QuizFragment extends Fragment {
     private Chronometer chrono;
 
     private int duration = Integer.MAX_VALUE;
+    private long elapsed;
 
     public QuizFragment newInstance(String text, Quiz quiz){
         QuizFragment mFragment = new QuizFragment();
@@ -82,28 +94,33 @@ public class QuizFragment extends Fragment {
 
     Chronometer.OnChronometerTickListener lstn_chrono = new Chronometer.OnChronometerTickListener() {
         public void onChronometerTick(Chronometer chronometer) {
-            long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-            if (duration <= elapsedMillis/1000){
-                Toast.makeText(chronometer.getContext(), "Time is Over!", Toast.LENGTH_LONG).show();
+            elapsed = SystemClock.elapsedRealtime() - chronometer.getBase();
+            if (duration <= elapsed/1000){
+                //Toast.makeText(chronometer.getContext(), "Time is Over!", Toast.LENGTH_LONG).show();
                 chronometer.stop();
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.time_over_message)
+                        .setTitle(R.string.time_over_title)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        }).show();
+                attemptAnswersDelivery();
+                ((QuizFragmentInterface)activity).onTimeIsOver(questions, answers);
             }
         }
     };
 
     Button.OnClickListener lstnSubmit = new Button.OnClickListener() {
         public void onClick(View view) {
-            Answer answer = new Answer(cur_question.getId(), String.valueOf(view.getId()), User.getId());
+            Answer answer = new Answer(questions.get(index_cur_question++).getId(), String.valueOf(view.getId()), User.getId());
             answers.add(answer);
-
-            if(questions.size()>0){
-                setLayoutNewQuestion();
-            }
-            else{
-                String text = "";
-                for(Answer ans : answers.getAnswers())text+= ans.getId_alternative() + " ";
-                Toast.makeText(view.getContext(), text, Toast.LENGTH_LONG).show();
-
-                //answers.NewAnswers();
+            if(index_cur_question < questions.size()){
+                setLayoutNewQuestion(questions.get(index_cur_question));
+            }else{
+                attemptAnswersDelivery();
+                ((QuizFragmentInterface)activity).onQuizFinished(questions, answers);
             }
         }
     };
@@ -122,7 +139,12 @@ public class QuizFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putLong(TAG_ELAPSED, elapsed);
+        outState.putInt(TAG_DURATION, duration);
+        outState.putInt(TAG_INDEX, index_cur_question);
         outState.putSerializable(TAG_QUIZ, quiz);
+        outState.putSerializable(TAG_QUESTION_COLLECTION, questions);
+        outState.putSerializable(TAG_ANSWER_COLLECTION, answers);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,8 +154,6 @@ public class QuizFragment extends Fragment {
             answers = new AnswerCollection();
 
             chrono = (Chronometer) rootView.findViewById(R.id.chr_duration);
-            chrono.setOnChronometerTickListener(lstn_chrono);
-            chrono.setBase(SystemClock.elapsedRealtime());
 
             layoutList = (ScrollView) rootView.findViewById(R.id.layout_question);
             loadQuestionStatusView = rootView.findViewById(R.id.layout_load_status);
@@ -143,14 +163,29 @@ public class QuizFragment extends Fragment {
             txtv_question = (FontAwesomeText) rootView.findViewById(R.id.txtv_question);
             txtv_num_question = (FontAwesomeText) rootView.findViewById(R.id.txtv_num_question);
 
-        if (getArguments()!= null) {
-            quiz = (Quiz) getArguments().getSerializable(TAG_QUIZ);
-            duration = Integer.parseInt(quiz.getDuration());
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+        if (savedInstanceState != null) {
+            quiz = (Quiz) savedInstanceState.getSerializable(TAG_QUIZ);
+            duration =  savedInstanceState.getInt(TAG_DURATION);
+            elapsed = savedInstanceState.getLong(TAG_ELAPSED);
+            questions = (ArrayList<Question>) savedInstanceState.getSerializable(TAG_QUESTION_COLLECTION);
+            answers = (AnswerCollection) savedInstanceState.getSerializable(TAG_ANSWER_COLLECTION);
             txtv_num_quiz.setText("Quiz " + quiz.getId());
+            chrono.setOnChronometerTickListener(lstn_chrono);
+            chrono.setBase(SystemClock.elapsedRealtime()+elapsed);
+            chrono.start();
+            setLayoutNewQuestion(questions.get(index_cur_question));
+        }else {
+            if (getArguments()!= null) {
+                quiz = (Quiz) getArguments().getSerializable(TAG_QUIZ);
+                duration = Integer.parseInt(quiz.getDuration());
+                txtv_num_quiz.setText("Quiz " + quiz.getId());
+                attemptQuestionsRetrieve();
+            }
         }
-
-        attemptQuestionsRetrieve();
-
         return rootView;
     }
 
@@ -164,9 +199,13 @@ public class QuizFragment extends Fragment {
         super.onResume();
     }
 
-    public void setLayoutNewQuestion(){
-               cur_question = questions.remove(0);
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
 
+    public void setLayoutNewQuestion(Question cur_question){
                 txtv_question.setText(cur_question.getEnunciate());
                 txtv_num_question.setText(cur_question.getId());
 
@@ -183,7 +222,8 @@ public class QuizFragment extends Fragment {
                     Button btn_alternative = new Button(getActivity());
                     btn_alternative.setText(alternative.getDescription());
                     btn_alternative.setTextSize(22);
-                    btn_alternative.setBackground(shape);
+                    //btn_alternative.setBackground(shape);
+
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -198,15 +238,16 @@ public class QuizFragment extends Fragment {
                 }
     }
 
-
-    public void onAlternativeClicked(){
-        setLayoutNewQuestion();
-    }
-
     public void attemptQuestionsRetrieve(){
         showProgress(true);
         authTask = new QuestionsLoadingTask();
         authTask.execute((Void) null);
+    }
+
+    public void attemptAnswersDelivery(){
+        showProgress(true);
+        answersTask = new AnswersDeliveryTask();
+        answersTask.execute((Void) null);
     }
 
     /**
@@ -269,12 +310,19 @@ public class QuizFragment extends Fragment {
             showProgress(false);
 
             if (success) {
-                setLayoutNewQuestion();
+                setLayoutNewQuestion(questions.get(index_cur_question));
+                chrono.setOnChronometerTickListener(lstn_chrono);
+                chrono.setBase(SystemClock.elapsedRealtime());
                 chrono.start();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
-                AlertDialog dialog = builder.create();
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.dialog_message)
+                        .setTitle(R.string.dialog_title)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        }).show();
             }
         }
 
@@ -284,7 +332,53 @@ public class QuizFragment extends Fragment {
             showProgress(false);
         }
     }
-    
+
+    public class AnswersDeliveryTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            try {
+                answers.NewAnswers();
+            } catch (Exception e) {
+                return false;
+            }
+
+            if (questions== null)return false;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            answersTask = null;
+            showProgress(false);
+
+            if (success) {
+                Toast.makeText(getActivity(), "Answers submitted", Toast.LENGTH_LONG).show();
+                chrono.start();
+            } else {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.dialog_message)
+                        .setTitle(R.string.dialog_title)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        }).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            answersTask = null;
+            showProgress(false);
+        }
+    }
+
+    public interface QuizFragmentInterface {
+        public void onTimeIsOver(ArrayList<Question> questions, AnswerCollection answers);
+        public void onQuizFinished(ArrayList<Question> questions, AnswerCollection answers);
+    }
+
 }
 
 

@@ -111,4 +111,32 @@ public class JsonUser {
 		return true;
 		//parseJsonUser(client.getResponse());
 	}
+
+
+    public static boolean updateUser(String id, String login, String password,
+                                  String firstName, String lastName,
+                                  String email) {
+
+        HttpUtil client = new HttpUtil();
+
+        // MEXER AQUI
+        client.AddParam(TAG_ID, id);
+        client.AddParam(TAG_LOGIN, login);
+        client.AddParam(TAG_PASSWORD, password);
+        client.AddParam(TAG_FIRST_NAME, firstName);
+        client.AddParam(TAG_LAST_NAME, lastName);
+        client.AddParam(TAG_EMAIL, email);
+
+
+        try {
+            client.Execute(HttpUtil.RequestMethod.GET, HttpUtil.getUrlUpdateUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        System.out.println(client.getResponse());
+        return true;
+        //parseJsonUser(client.getResponse());
+    }
 }

@@ -1,11 +1,12 @@
 package edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.answer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.JsonQuiz;
 import edu.auburn.eng.csse.comp3710.cma0036.droidclicker.models.quiz.Quiz;
 
-public class AnswerCollection {
+public class AnswerCollection implements Serializable{
 
     private ArrayList<Answer> answers;
 

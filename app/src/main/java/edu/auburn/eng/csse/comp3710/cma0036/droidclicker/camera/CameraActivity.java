@@ -56,6 +56,16 @@ public class CameraActivity extends Activity {
 	public CameraActivity(){
 		
 	}
+
+
+    public void setBtnListenerOrDisable(Button btn,Button.OnClickListener onClickListener,String intentName) {
+        if (CameraActivity.isIntentAvailable(this, intentName)) {
+            btn.setOnClickListener(onClickListener);
+        } else {
+            btn.setText(getText(R.string.cannot).toString() + " " + btn.getText());
+            btn.setClickable(false);
+        }
+    }
 	
 	public CameraActivity(ImageView imgv){
 		super();

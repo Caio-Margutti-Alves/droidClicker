@@ -94,7 +94,7 @@
                     android:orientation="horizontal" >
 
                     <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/firstName"
+                        android:id="@+id/edtFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -107,7 +107,7 @@
                         bootstrap:be_state="success" />
 
                     <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/lastName"
+                        android:id="@+id/edtLastName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -119,6 +119,7 @@
                         bootstrap:be_roundedCorners="true"
                         bootstrap:be_state="success"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -126,7 +127,7 @@
                     android:orientation="vertical" >
 
                     <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/email"
+                        android:id="@+id/edtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_email"
@@ -139,7 +140,7 @@
                         bootstrap:be_state="success"/>
 
                     <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/login"
+                        android:id="@+id/edtLogin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_login"
@@ -152,7 +153,7 @@
                         bootstrap:be_state="success"/>
 
                     <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/password"
+                        android:id="@+id/edtPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
